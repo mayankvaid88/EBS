@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ebs
+    username: root
+    password: Helloworld@01
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
