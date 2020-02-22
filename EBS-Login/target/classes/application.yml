@@ -1,9 +1,12 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ebs
+    url: jdbc:mysql://db:3306/ebs
     username: root
-    password: Helloworld@01
+    password: root
+    hikari:
+      initializationFailTimeout: 100000
   jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate.ddl-auto: update
     show-sql: true
