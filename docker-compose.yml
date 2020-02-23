@@ -1,20 +1,30 @@
 version: '3'
 services:
+  web:
+    build: .
+    ports:
+      - "90:80"
+    volumes:
+       - /Users/in-mayank.vaid/apacheconf/sites:/usr/local/apache2/conf/sites
+       - /Users/in-mayank.vaid/apacheconf/htmlfiles:/usr/local/apache2/ebs
+    networks:
+      - app_net
   db:
     image: "mysql:latest"
     ports:
       - "3306:3306"
     command: --init-file /data/application/init.sql
     volumes:
-      - ./db-migrations/init.sql:/data/application/init.sql
+      - ./EBS-Login/db-migrations/init.sql:/data/application/init.sql
     environment:
       - MYSQL_ROOT_PASSWORD=root
     networks:
       - app_net
-  web:
-    build: .
+  app:
+    build: ./EBS-Login/
     depends_on:
       - db
+      - web
     ports:
       - "8080:8080"
     networks:
