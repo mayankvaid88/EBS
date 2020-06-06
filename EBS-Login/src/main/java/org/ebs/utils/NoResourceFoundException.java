@@ -3,6 +3,6 @@ package org.ebs.utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Invalid username")
-public class UserNotFoundException extends Exception {
+@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "No Resource Found")
+public class NoResourceFoundException extends Exception {
 }

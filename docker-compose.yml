@@ -5,25 +5,50 @@ services:
     ports:
       - "90:80"
     volumes:
-       - /Users/in-mayank.vaid/apacheconf/sites:/usr/local/apache2/conf/sites
-       - /Users/in-mayank.vaid/apacheconf/htmlfiles:/usr/local/apache2/ebs
+      - /Users/in-mayank.vaid/apacheconf/sites:/usr/local/apache2/conf/sites
+      - /Users/in-mayank.vaid/apacheconf/htmlfiles:/usr/local/apache2/ebs
     networks:
       - app_net
-  db:
-    image: "mysql:latest"
-    ports:
-      - "3306:3306"
-    command: --init-file /data/application/init.sql
+  ebs_login_db1:
+    image: "mysql"
     volumes:
-      - ./EBS-Login/db-migrations/init.sql:/data/application/init.sql
+      - ./mysql/replication1.cnf:/etc/mysql/conf.d/replication1.cnf
     environment:
       - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - app_net
+  ebs_login_db2:
+    image: "mysql"
+    volumes:
+      - ./mysql/replication2.cnf:/etc/mysql/conf.d/replication2.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - app_net
+  ebs_login_db3:
+    image: "mysql"
+    volumes:
+      - ./mysql/replication3.cnf:/etc/mysql/conf.d/replication3.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - app_net
+  client:
+    image: "mysql"
+    command: bash -c "./runDBScript.sh ebs_login_db1 3306 master_bootstrap_replication.sql && ./runDBScript.sh ebs_login_db2 3306 master_replication.sql && ./runDBScript.sh ebs_login_db3 3306 master_replication.sql && ./runDBScript.sh ebs_login_db1 3306 setup_ebs_db.sql"
+    volumes:
+      - ./mysql/master_bootstrap_replication.sql:/master_bootstrap_replication.sql
+      - ./mysql/master_replication.sql:/master_replication.sql
+      - ./mysql/setup_ebs_db.sql:/setup_ebs_db.sql
+      - ./scripts/runDBScript.sh:/runDBScript.sh
     networks:
       - app_net
   app:
     build: ./EBS-Login/
     depends_on:
-      - db
+      - ebs_login_db1
+      - ebs_login_db2
+      - ebs_login_db3
       - web
     ports:
       - "8080:8080"
