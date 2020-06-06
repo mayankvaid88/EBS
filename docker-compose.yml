@@ -43,6 +43,13 @@ services:
       - ./scripts/runDBScript.sh:/runDBScript.sh
     networks:
       - app_net
+  haproxy:
+    build: ./haproxy/
+    ports:
+      - "36930:36936"
+      - "8089:8089"
+    networks:
+      - app_net
   app:
     build: ./EBS-Login/
     depends_on:
@@ -50,6 +57,7 @@ services:
       - ebs_login_db2
       - ebs_login_db3
       - web
+      - haproxy
     ports:
       - "8080:8080"
     networks:

@@ -16,7 +16,7 @@ healthCheck() {
   port=$2
   count=0
   while ! nc -vz $host $port; do
-    echo "unable to reach host. sleeping for 1 sec"
+    echo "unable to reach host. sleeping for 5 sec"
     sleep 5
     count=$((count + 1))
     if [ $count -eq 60 ]; then
