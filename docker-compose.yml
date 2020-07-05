@@ -58,8 +58,6 @@ services:
       - ebs_login_db3
       - web
       - haproxy
-    ports:
-      - "8080:8080"
     networks:
       - app_net
 networks:

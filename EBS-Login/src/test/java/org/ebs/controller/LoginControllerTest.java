@@ -1,10 +1,10 @@
 package org.ebs.controller;
 
 import com.google.gson.Gson;
+import org.ebs.exception.InvalidUserCredentialException;
 import org.ebs.model.LoginModel;
 import org.ebs.service.LoginService;
 import org.ebs.utils.Constants;
-import org.ebs.utils.InvalidUserCredentialException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;

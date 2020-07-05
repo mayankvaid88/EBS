@@ -9,7 +9,7 @@ public class SignUpModel {
     @NotNull
     private char[] password;
     @NotNull
-    private String confirmPassword;
+    private char[] confirmPassword;
 
     public SignUpModel() {
     }
@@ -27,7 +27,7 @@ public class SignUpModel {
         return password;
     }
 
-    public String getConfirmPassword() {
+    public char[] getConfirmPassword() {
         return confirmPassword;
     }
 }

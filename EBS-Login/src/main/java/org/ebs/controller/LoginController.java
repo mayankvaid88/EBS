@@ -1,14 +1,20 @@
 package org.ebs.controller;
 
+import org.ebs.exception.*;
 import org.ebs.model.LoginModel;
 import org.ebs.model.SignUpModel;
+import org.ebs.model.UserProfile;
 import org.ebs.service.LoginService;
-import org.ebs.utils.*;
+import org.ebs.service.UserProfileService;
+import org.ebs.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,12 +25,31 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private UserProfileService userProfileService;
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @RequestMapping(path = "/session", method = RequestMethod.POST)
-    public void login(@RequestBody LoginModel loginModel, HttpServletRequest request) throws UserNotFoundException, InvalidUserCredentialException {
+    public ResponseEntity login(@RequestBody LoginModel loginModel, HttpServletRequest request) throws UserNotFoundException, InvalidUserCredentialException, UserProfileNotFoundException {
         loginService.login(loginModel);
         HttpSession session = request.getSession(true);
         session.setAttribute(Constants.LOGIN_ID, loginModel.getUserName());
+        UserProfile userProfile = userProfileService.getUserProfile(loginModel.getUserName());
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://ebs-jwt-service/jwt")
+                .queryParam("loginId", userProfile.getLoginId())
+                .queryParam("name", userProfile.getName())
+                .queryParam("roleE", userProfile.getRoleE().getRole());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+            ResponseEntity<String> str = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
+        HttpHeaders h = new HttpHeaders();
+        h.add(HttpHeaders.SET_COOKIE, "jwt=" + str.getBody());
+        return ResponseEntity.status(HttpStatus.OK).headers(h).build();
     }
 
     @RequestMapping(path = "/session", method = RequestMethod.DELETE)
@@ -37,10 +62,15 @@ public class LoginController {
     }
 
     @RequestMapping(path = "/users", method = RequestMethod.POST)
-    public void signUp(@RequestBody @NotNull SignUpModel signUpModel) throws PasswordMismatchException {
-        System.out.println("password "+signUpModel.getPassword().length);
-        if (!signUpModel.getPassword().equals(signUpModel.getConfirmPassword())) {
+    public void signUp(@RequestBody @NotNull SignUpModel signUpModel) throws PasswordMismatchException, CredentialsAlreadyPresentException {
+        if (signUpModel.getPassword().length != signUpModel.getConfirmPassword().length) {
             throw new PasswordMismatchException();
+        } else {
+            for (int i = 0; i < signUpModel.getPassword().length - 1; i++) {
+                if (signUpModel.getPassword()[i] != signUpModel.getConfirmPassword()[i]) {
+                    throw new PasswordMismatchException();
+                }
+            }
         }
         loginService.signUp(signUpModel);
     }

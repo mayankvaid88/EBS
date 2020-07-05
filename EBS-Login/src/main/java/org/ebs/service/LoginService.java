@@ -2,12 +2,13 @@ package org.ebs.service;
 
 
 import org.ebs.entity.LoginEntity;
+import org.ebs.exception.CredentialsAlreadyPresentException;
+import org.ebs.exception.InvalidUserCredentialException;
+import org.ebs.exception.UserNotFoundException;
 import org.ebs.model.LoginModel;
 import org.ebs.model.SignUpModel;
 import org.ebs.repository.LoginRepository;
 import org.ebs.utils.EncryptionManager;
-import org.ebs.utils.InvalidUserCredentialException;
-import org.ebs.utils.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +34,13 @@ public class LoginService {
         }
     }
 
-    public void signUp(SignUpModel signUpModel) {
+    public void signUp(SignUpModel signUpModel) throws CredentialsAlreadyPresentException {
         String encryptedPWd = EncryptionManager.encrypt(signUpModel.getPassword());
+        Optional<LoginEntity> byId = loginRepository.findById(signUpModel.getUsername());
+        if (byId.isPresent()) {
+            throw new CredentialsAlreadyPresentException();
+        }
+        loginRepository.findById(signUpModel.getUsername());
         LoginEntity loginEntity = new LoginEntity();
         loginEntity.setUserName(signUpModel.getUsername());
         loginEntity.setPassword(encryptedPWd);

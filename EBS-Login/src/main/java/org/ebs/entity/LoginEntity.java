@@ -1,29 +1,27 @@
 package org.ebs.entity;
 
-import org.ebs.convertors.UserRoleConvertor;
-import org.ebs.enums.UserRoleE;
+import org.ebs.enums.RoleE;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Table(name = "LOGIN_TABLE")
 @Entity
 public class LoginEntity {
 
     @Id
-    @Column(name = "USERNAME")
+    @Column(name = "login_id")
     private String userName;
-    @Column(name = "PASSWORD")
+    @Column(name = "password")
     private String password;
-    @Column(name = "ROLE")
-    @Convert(converter = UserRoleConvertor.class)
-    private UserRoleE userRoleE;
 
     public LoginEntity() {}
 
-    public LoginEntity(String userName, String password, UserRoleE userRoleE) {
+    public LoginEntity(String userName, String password, RoleE roleE) {
         this.userName = userName;
         this.password = password;
-        this.userRoleE = userRoleE;
     }
 
     public String getUserName() {
@@ -40,13 +38,5 @@ public class LoginEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public UserRoleE getUserRoleE() {
-        return userRoleE;
-    }
-
-    public void setUserRoleE(UserRoleE userRoleE) {
-        this.userRoleE = userRoleE;
     }
 }

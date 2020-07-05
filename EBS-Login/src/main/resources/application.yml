@@ -1,7 +1,9 @@
 spring:
+  application:
+    name: ebs-login
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql:replication://haproxy:36936/ebs
+    url: jdbc:mysql:replication://localhost:36930/ebs
     username: root
     password: root
     hikari:
@@ -9,3 +11,17 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate.ddl-auto: update
+server:
+  port: 8081
+opentracing:
+  jaeger:
+    udp-sender:
+      host: localhost
+      port: 6831
+  spring:
+    cloud:
+      log: enabled
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8082/eureka/
