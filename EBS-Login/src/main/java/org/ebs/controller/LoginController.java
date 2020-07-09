@@ -7,6 +7,8 @@ import org.ebs.model.UserProfile;
 import org.ebs.service.LoginService;
 import org.ebs.service.UserProfileService;
 import org.ebs.utils.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,8 @@ import javax.validation.constraints.NotNull;
 @RestController
 public class LoginController {
 
+    Logger logger = LoggerFactory.getLogger("ebsLogin");
+
     @Autowired
     private LoginService loginService;
     @Autowired
@@ -32,7 +36,8 @@ public class LoginController {
     RestTemplate restTemplate;
 
     @RequestMapping(path = "/session", method = RequestMethod.POST)
-    public ResponseEntity login(@RequestBody LoginModel loginModel, HttpServletRequest request) throws UserNotFoundException, InvalidUserCredentialException, UserProfileNotFoundException {
+    public ResponseEntity<String> login(@RequestBody LoginModel loginModel, HttpServletRequest request) throws UserNotFoundException, InvalidUserCredentialException, UserProfileNotFoundException {
+        logger.info("Login journey started");
         loginService.login(loginModel);
         HttpSession session = request.getSession(true);
         session.setAttribute(Constants.LOGIN_ID, loginModel.getUserName());

@@ -23,7 +23,9 @@ public class ApplicationRunner {
         samplerConfiguration.withType(ConstSampler.TYPE);
         samplerConfiguration.withParam(1);
         Configuration.ReporterConfiguration reporterConfiguration = new Configuration.ReporterConfiguration();
-        reporterConfiguration.withLogSpans(true);
+        Configuration.SenderConfiguration senderConfiguration = new Configuration.SenderConfiguration();
+        senderConfiguration.withAgentHost("192.168.1.56").withAgentPort(6831);
+        reporterConfiguration.withSender(senderConfiguration);
         return new Configuration("ebs-login").
                 withSampler(samplerConfiguration).
                 withReporter(reporterConfiguration).getTracer();

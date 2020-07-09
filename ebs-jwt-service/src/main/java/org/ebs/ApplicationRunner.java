@@ -20,8 +20,12 @@ public class ApplicationRunner {
         Configuration.SamplerConfiguration samplerConfiguration = new Configuration.SamplerConfiguration();
         samplerConfiguration.withType(ConstSampler.TYPE);
         samplerConfiguration.withParam(1);
+        Configuration.ReporterConfiguration reporterConfiguration = new Configuration.ReporterConfiguration();
+        Configuration.SenderConfiguration senderConfiguration = new Configuration.SenderConfiguration();
+        senderConfiguration.withAgentHost("192.168.1.56").withAgentPort(6831);
+        reporterConfiguration.withSender(senderConfiguration);
         return new Configuration("ebs-jwt-service").
                 withSampler(samplerConfiguration).
-                withReporter(new Configuration.ReporterConfiguration()).getTracer();
+                withReporter(reporterConfiguration).getTracer();
     }
 }
