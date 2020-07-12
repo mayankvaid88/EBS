@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 public class LoginController {
 
-    Logger logger = LoggerFactory.getLogger("ebsLogin");
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     private LoginService loginService;

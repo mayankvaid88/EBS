@@ -58,8 +58,6 @@ services:
       - ebs_login_db3
       - web
       - haproxy
-    volumes:
-      - /Users/in-mayank.vaid/logs/ebs:/etc/logs/ebs/
     networks:
       - app_net
 networks:

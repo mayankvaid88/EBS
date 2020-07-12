@@ -6,6 +6,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.ebs.exception.UserNotAuthorisedException;
 import org.ebs.model.UserProfile;
 import org.ebs.utils.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +16,12 @@ import java.util.Map;
 @RestController
 public class JwtController {
 
+    Logger logger = LoggerFactory.getLogger(JwtController.class);
+
+
     @RequestMapping(path = "/jwt", method = RequestMethod.GET)
     public String getJWTToken(HttpServletRequest request, UserProfile userProfile) {
+        logger.info("creating JWT token");
         return JWT.create().withSubject(userProfile.getLoginId()).
                 withClaim("NAME", userProfile.getName()).
                 withClaim("ROLE", userProfile.getRoleE().getRole()).

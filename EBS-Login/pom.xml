@@ -130,6 +130,12 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.11.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.danielwegener/logback-kafka-appender -->
+        <dependency>
+            <groupId>com.github.danielwegener</groupId>
+            <artifactId>logback-kafka-appender</artifactId>
+            <version>0.2.0-RC2</version>
+        </dependency>
     </dependencies>
 
 </project>
