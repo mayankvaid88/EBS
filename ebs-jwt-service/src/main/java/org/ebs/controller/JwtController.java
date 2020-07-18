@@ -17,8 +17,7 @@ import java.util.Map;
 public class JwtController {
 
     Logger logger = LoggerFactory.getLogger(JwtController.class);
-
-
+    
     @RequestMapping(path = "/jwt", method = RequestMethod.GET)
     public String getJWTToken(HttpServletRequest request, UserProfile userProfile) {
         logger.info("creating JWT token");

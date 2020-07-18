@@ -42,7 +42,6 @@ public class LoginController {
         HttpSession session = request.getSession(true);
         session.setAttribute(Constants.LOGIN_ID, loginModel.getUserName());
         UserProfile userProfile = userProfileService.getUserProfile(loginModel.getUserName());
-
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://ebs-jwt-service/jwt")
                 .queryParam("loginId", userProfile.getLoginId())
                 .queryParam("name", userProfile.getName())

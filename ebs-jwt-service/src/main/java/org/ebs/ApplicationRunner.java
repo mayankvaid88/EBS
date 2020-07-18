@@ -22,7 +22,7 @@ public class ApplicationRunner {
         samplerConfiguration.withParam(1);
         Configuration.ReporterConfiguration reporterConfiguration = new Configuration.ReporterConfiguration();
         Configuration.SenderConfiguration senderConfiguration = new Configuration.SenderConfiguration();
-        senderConfiguration.withAgentHost("192.168.1.56").withAgentPort(6831);
+        senderConfiguration.withAgentHost("jaeger_agent").withAgentPort(6831);
         reporterConfiguration.withSender(senderConfiguration);
         return new Configuration("ebs-jwt-service").
                 withSampler(samplerConfiguration).

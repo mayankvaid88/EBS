@@ -106,6 +106,7 @@
             <artifactId>logback-kafka-appender</artifactId>
             <version>0.2.0-RC2</version>
         </dependency>
+
     </dependencies>
 
 </project>
