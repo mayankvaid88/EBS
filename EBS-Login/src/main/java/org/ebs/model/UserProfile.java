@@ -2,7 +2,9 @@ package org.ebs.model;
 
 import org.ebs.enums.RoleE;
 
-public class UserProfile {
+import java.io.Serializable;
+
+public class UserProfile implements Serializable {
 
     private String loginId;
     private String name;
