@@ -11,12 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
@@ -49,7 +47,7 @@ public class LoginController {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
         HttpEntity<?> entity = new HttpEntity<>(headers);
-            ResponseEntity<String> str = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> str = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
         HttpHeaders h = new HttpHeaders();
         h.add(HttpHeaders.SET_COOKIE, "jwt=" + str.getBody());
         return ResponseEntity.status(HttpStatus.OK).headers(h).build();

@@ -27,7 +27,7 @@ public class ApplicationRunner {
         Configuration.ReporterConfiguration reporterConfiguration = new Configuration.ReporterConfiguration();
         Configuration.SenderConfiguration senderConfiguration = new Configuration.SenderConfiguration();
         senderConfiguration.withAgentHost("jaeger_agent").withAgentPort(6831);
-        reporterConfiguration.withSender(senderConfiguration).withLogSpans(true);
+        reporterConfiguration.withSender(senderConfiguration);
         return new Configuration("ebs-login").
                 withSampler(samplerConfiguration).
                 withReporter(reporterConfiguration).getTracer();
